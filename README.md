@@ -78,15 +78,7 @@ which let you forget the labels, ```domain```, ```mapping```, and ```codomain```
 
 ## Constructions
 
-Let's look at some interesting constructions we can build with these tools.
-
-### HOM
-
-*The set Hom(A,B) is the set of maps from A into B.*
-
-```javascript
-var Hom_A_B = FiniteSets.hom( ["a","b"], ["x","y"] );
-```
+Let's look at some interesting constructions we can build with these tools. For now, refer to ```index.js``` to see some of the constructions in action.
 
 
 
