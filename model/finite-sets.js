@@ -5,6 +5,10 @@ var uuid = require('node-uuid');
 module.exports = function() {
 
 	return {
+		is: {
+			set: isSet,
+			map: isMap
+		},
 		set: {
 			explicit: explicitSet,
 			natural: setFromCardinality
@@ -14,7 +18,7 @@ module.exports = function() {
 			random: randomMap
 		},
 		hom: hom,
-		injections: injections
+		injections: injections,
 	};
 
 }
@@ -51,6 +55,30 @@ function str( x ) {
  * @return boolean, true if x and y are "the same".
  */
 function equals( x, y ) { return x == y; }
+
+/**
+ * isSet. This routine returns true if the passed parameter fulfills the specification
+ * of a set, which currently just says that it is an array of any type of value.
+ * 
+ * @param obj, an object to test for set hood
+ * @return boolean true if the passed obj is a set
+ */
+function isSet( obj ) {
+	return obj && obj.constructor == Array;
+}
+
+/**
+ * isMap. This routine returns true if the passed parameter fulfills the specification
+ * of a map, which has a domain field, codomain field, and mapping field.
+ * 
+ * @param obj, an object to test for map hood
+ * @return boolean true if the passed obj is a map
+ */
+function isMap( obj ) {
+	return ( obj.domain && isSet( obj.domain )) 
+	    && ( obj.codomain && isSet( obj.codomain ) ) 
+	    && ( obj.mapping && isSet( obj.mapping ) );
+}
 
 /**
  * set.
@@ -101,7 +129,10 @@ function randomMap( domain, codomain ) {
 }
 
 /**
- * 
+ * element. get an element in a set.
+ *
+ * @param set, a set to return an element of
+ * @return element, an element in the given set.
  */
 function element( set ) { return set[0]; }
 
@@ -124,7 +155,7 @@ function remove( x, X ) {
 
 /**
  * combine. This helper routine concatenats a set of maps in a special way,
- * Which resembles he rule for matrix multiplication. Given a pair of sets of maps
+ * Which resembles the rule for matrix multiplication. Given a pair of sets of maps
  *
  *
  */
