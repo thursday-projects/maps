@@ -17,8 +17,11 @@ module.exports = function() {
 			explicit: explicitMap,
 			random: randomMap
 		},
-		hom: hom,
-		injections: injections,
+		compose: compose,
+		functors: {
+			hom: hom
+		},
+		injections: injections
 	};
 
 }
@@ -153,6 +156,29 @@ function remove( x, X ) {
 	return X.filter( function( e ) { return !equals( x, e ); });
 }
 
+
+/**
+ * compose. Given two composable maps f : A --> B, and g : B --> C 
+ * produce the unique map gf : A --> C.
+ *
+ * @param f, a map
+ * @param g, a map
+ * @return gf, the unique composition of f and g.
+ */
+ function compose( f, g ) {
+ 	if ( !equals( f.codomain, g.domain ) ) throw new Error("Non-composable Pair of Maps."); 
+
+ 	return explicitMap( f.domain , f.mapping.map( function( f_arr ) {
+ 
+ 		var e = g.mapping.filter( function( g_arr ) { return equals( source( g_arr ), target( f_arr ) ); });
+ 		// DEBUG
+ 		if ( e.length > 1 ) throw new Error('Malformed Map: ' + str( g.mapping ) );
+ 		// /DEBUG
+ 		return [source( f_arr ), target( element( e ) )];
+
+ 	}) , g.codomain );
+ }
+
 /**
  * combine. This helper routine concatenats a set of maps in a special way,
  * Which resembles the rule for matrix multiplication. Given a pair of sets of maps
@@ -195,10 +221,73 @@ function HOM( X, Y ) {
 	}
 }
 
-function hom(X, Y) {
-	return HOM(X,Y).map( function( f ) {
-		return explicitMap( X, f, Y );
-	});
+/**
+ *
+ *
+ */
+function hom( X,Y ) {
+	if ( isSet( X ) && isSet( Y ) ) {
+		/**
+		 * Hom(X,Y) is the set of all maps between X and Y.
+		 */
+
+		return HOM(X,Y).map( function( f ) {
+			return explicitMap( X, f, Y );
+		});
+
+	} else if ( isSet( X ) && isMap( Y ) ) {
+		/**
+		 * for f : A -> B, Hom(X,f) : Hom(X,A) -> Hom(X,B),
+		 * which associates each map g : X -> A with the map compose( g, f ) : X -> B.
+		 */
+		// this should be a map from HOM(X, f.domain = A), HOM(X, f.codomain = B)
+		var f = Y;
+		var A = f.domain;
+		var B = f.codomain;
+
+		// Y = f : A --> B
+		var homXA = hom( X, A );
+		var homXB = hom( X, B );
+
+		return explicitMap(
+
+			homXA,
+			homXA.map( function( g ) {
+				return [g, compose( g, f )];
+			}),
+			homXB
+
+		);
+
+	} else if ( isMap( X ) && isSet( Y ) ) {
+		/**
+		 * for f : A -> B, Hom(f,Y) : Hom(B,Y) -> Hom(A,Y),
+		 * which associates each map g : B -> Y with the map compose( f, g ) : A -> Y.
+		 *
+		 * Hom(f,Y)(g) : Hom(A,Y) = gf : A -> Y : Hom( A,Y )
+		 */
+		var f = X;
+		var A = f.domain;
+		var B = f.codomain;
+
+		var homBY = hom( B, Y );
+		var homAY = hom( A, Y );
+
+		return explicitMap(
+
+			homBY,
+			homBY.map( function( h ) {
+				return [h, compose( f, h )];
+			}),
+			homAY
+			
+		);
+
+
+
+	}
+
+	throw new Error("Can't compute the hom of two maps!");
 }
 
 /**
