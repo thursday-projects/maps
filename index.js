@@ -27,3 +27,17 @@ console.log( JSON.stringify( FinSet.functors.hom( A,h ).mapping, null, 2 ) );
 // ( Just show us the mappings, not the domain and codomain )
 // console.log( "\ninjections( A, B ) =" );
 // console.log( FinSet.injections( B, A ).map( function( m ) { return m.mapping; }) );
+
+var ColorGrid = require('./view/color-grid.js');
+
+ColorGrid( document.body )
+	.set( f )
+	.render();
+
+ColorGrid( document.body )
+	.set( g )
+	.render();
+
+ColorGrid( document.body )
+	.set( h )
+	.render();

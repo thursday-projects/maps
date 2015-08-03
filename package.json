@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ecstatic -p 8000 public",
+    "build": "browserify index.js -o public/bundle.js",
+    "watch": "watchify index.js -o public/bundle.js"
   },
   "repository": "https://github.com/thursday-projects/maps.git",
   "author": [
@@ -13,6 +16,13 @@
   ],
   "license": "BSD-2-Clause",
   "dependencies": {
+    "browserify": "^11.0.1",
+    "d3": "^3.5.6",
+    "d3-grid": "^0.1.1",
+    "ecstatic": "^0.8.0",
     "node-uuid": "~1.4.3"
+  },
+  "devDependencies": {
+    "watchify": "^3.3.1"
   }
 }
