@@ -2,8 +2,8 @@ var FinSet = require('./model/finite-sets')();
 
 // Hack up some sets.
 var A = FinSet.set.explicit( 'a', 'b' );
-var B = FinSet.set.explicit( 'x', 'y', 'z' );
-var C = FinSet.set.explicit( 'l','m','n' );
+var B = FinSet.set.explicit( 'x', 'y', 'z', 'zz' );
+var C = FinSet.set.explicit( 'l','m','n', 'o' );
 
 var f = FinSet.map.random( A, B );
 var g = FinSet.map.random( B, C );
@@ -29,15 +29,18 @@ console.log( JSON.stringify( FinSet.functors.hom( A,h ).mapping, null, 2 ) );
 // console.log( FinSet.injections( B, A ).map( function( m ) { return m.mapping; }) );
 
 var ColorGrid = require('./view/color-grid.js');
+var BubblesAndArrows = require('./view/bubbles-and-arrows.js');
 
-ColorGrid( document.body )
-	.set( f )
-	.render();
+FinSet.functors.hom( C, B ).forEach( function ( set ) {
+	BubblesAndArrows( document.body )
+		.set( set )
+		.render();
+});
 
-ColorGrid( document.body )
-	.set( g )
-	.render();
+// ColorGrid( document.body )
+// 	.set( g )
+// 	.render();
 
-ColorGrid( document.body )
-	.set( h )
-	.render();
+// ColorGrid( document.body )
+// 	.set( h )
+// 	.render();
