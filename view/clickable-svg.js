@@ -106,10 +106,11 @@ function ClickableSVG ( parentSelector ) {
 					var maxY = d3.max(ys);
 
 					var padding = 50;
-					var deltaX = maxX - minX;
-					var deltaY = maxY - minY;
+					// divide by 2, as we only want half the distance traveled
+					var deltaX = (maxX - minX) / 2;
+					var deltaY = (maxY - minY) / 2;
 
-					var radius = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) / 2 + padding;
+					var radius = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)) + padding;
 
 					console.log(deltaX);
 					console.log(deltaY);
