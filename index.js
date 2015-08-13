@@ -30,12 +30,15 @@ console.log( JSON.stringify( FinSet.functors.hom( A,h ).mapping, null, 2 ) );
 
 var ColorGrid = require('./view/color-grid.js');
 var BubblesAndArrows = require('./view/bubbles-and-arrows.js');
+var ClickableSVG = require('./view/clickable-svg.js');
 
-FinSet.functors.hom( C, B ).forEach( function ( set ) {
-	BubblesAndArrows( document.body )
-		.set( set )
-		.render();
-});
+var canvas = ClickableSVG( document.body );
+
+// FinSet.functors.hom( C, B ).forEach( function ( set ) {
+// 	BubblesAndArrows( document.body )
+// 		.set( set )
+// 		.render();
+// });
 
 // ColorGrid( document.body )
 // 	.set( g )
